@@ -1,10 +1,11 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { PlusCircle } from "phosphor-react";
-import { Header } from "./components/Header";
-import Clipboard from "./assets/Clipboard.svg";
+import { Header } from "./components/Header/Header";
 
 import styles from "./App.module.css";
 import "./global.css";
+import { NoTasks } from "./components/NoTasks/NoTasks";
+import { InputForm } from "./components/InputForm/InputForm";
+import { TasksCount } from "./components/TasksCount/TasksCount";
 
 interface Task {
   content: string;
@@ -33,46 +34,18 @@ function App() {
       <Header />
       <div className={styles.bodyBox}>
         <main className={styles.contentBox}>
-          <form onSubmit={handleAddTask} className={styles.inputBox}>
-            <input
-              type="text"
-              placeholder="Adicione uma nova tarefa"
-              value={newTaskContent}
-              onChange={handleNewTaskChange}
-              required
-            />
-            <button>
-              Criar
-              <PlusCircle size={16} />
-            </button>
-          </form>
+          <InputForm
+            handleAddTask={handleAddTask}
+            handleNewTaskChange={handleNewTaskChange}
+            newTaskContent={newTaskContent}
+          />
           <div className={styles.tasksBox}>
-            <div className={styles.tasksCount}>
-              <div className={styles.tasksCountItem}>
-                <p className={styles.createdTasks}>Tarefas criadas</p>{" "}
-                <span>{tasksCount}</span>
-              </div>
-              <div className={styles.tasksCountItem}>
-                <p className={styles.doneTasks}>Concluídas </p>
-                <span>
-                  {doneTasksCount === 0
-                    ? doneTasksCount
-                    : `${doneTasksCount} de ${tasksCount}`}
-                </span>
-              </div>
-            </div>
+            <TasksCount
+              tasksCount={tasksCount}
+              doneTasksCount={doneTasksCount}
+            />
             <div className={styles.tasks}>
-              {tasksCount === 0 ? (
-                <div className={styles.noTasks}>
-                  <img src={Clipboard} />
-                  <div>
-                    <p>Você ainda não tem tarefas cadastradas</p>
-                    <p>Crie tarefas e organize seus itens a fazer</p>
-                  </div>
-                </div>
-              ) : (
-                <div></div>
-              )}
+              {tasksCount === 0 ? <NoTasks /> : <div></div>}
             </div>
           </div>
         </main>
