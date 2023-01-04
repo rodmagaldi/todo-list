@@ -78,6 +78,7 @@ function App() {
                 <div className={styles.multipleTasks}>
                   {tasks.map((task) => (
                     <Task
+                      key={task.id}
                       task={task}
                       handleTaskCompletionStatus={handleTaskCompletionStatus}
                       deleteTask={handleDeleteTask}
