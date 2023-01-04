@@ -1,9 +1,10 @@
-import styles from "./App.module.css";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { PlusCircle } from "phosphor-react";
 import { Header } from "./components/Header";
+import Clipboard from "./assets/Clipboard.svg";
 
+import styles from "./App.module.css";
 import "./global.css";
-import { ChangeEvent, FormEvent, useState } from "react";
 
 interface Task {
   content: string;
@@ -54,11 +55,24 @@ function App() {
               <div className={styles.tasksCountItem}>
                 <p className={styles.doneTasks}>Concluídas </p>
                 <span>
-                  {doneTasksCount
-                    ? doneTasksCount === 0
+                  {doneTasksCount === 0
+                    ? doneTasksCount
                     : `${doneTasksCount} de ${tasksCount}`}
                 </span>
               </div>
+            </div>
+            <div className={styles.tasks}>
+              {tasksCount === 0 ? (
+                <div className={styles.noTasks}>
+                  <img src={Clipboard} />
+                  <div>
+                    <p>Você ainda não tem tarefas cadastradas</p>
+                    <p>Crie tarefas e organize seus itens a fazer</p>
+                  </div>
+                </div>
+              ) : (
+                <div></div>
+              )}
             </div>
           </div>
         </main>
