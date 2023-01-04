@@ -18,3 +18,9 @@
 .tasks {
   margin-top: 1.5rem;
 }
+
+.multipleTasks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}

@@ -6,10 +6,12 @@ import "./global.css";
 import { NoTasks } from "./components/NoTasks/NoTasks";
 import { InputForm } from "./components/InputForm/InputForm";
 import { TasksCount } from "./components/TasksCount/TasksCount";
+import { Task } from "./components/Task/Task";
 
-interface Task {
+export interface Task {
   content: string;
   done: boolean;
+  id: string;
 }
 
 function App() {
@@ -25,8 +27,33 @@ function App() {
 
   const handleAddTask = (event: FormEvent) => {
     event.preventDefault();
-    setTasks([...tasks, { content: newTaskContent, done: false }]);
+    setTasks([
+      { content: newTaskContent, done: false, id: crypto.randomUUID() },
+      ...tasks,
+    ]);
     setNewTaskContent("");
+  };
+
+  const handleTaskCompletionStatus = (event: ChangeEvent<HTMLInputElement>) => {
+    const otherTasks = tasks.filter((task) => task.id !== event.target.id);
+    const targetTask = tasks.filter((task) => task.id === event.target.id)[0];
+
+    const changedTask = {
+      ...targetTask,
+      done: !targetTask.done,
+    };
+
+    const newTasksList = [...otherTasks, changedTask].sort(
+      (a: Task, b: Task) => Number(a.done) - Number(b.done)
+    );
+
+    setTasks(newTasksList);
+  };
+
+  const handleDeleteTask = (id: string) => {
+    const tasksWithoutDeletedOne = tasks.filter((task) => task.id !== id);
+
+    setTasks(tasksWithoutDeletedOne);
   };
 
   return (
@@ -45,7 +72,19 @@ function App() {
               doneTasksCount={doneTasksCount}
             />
             <div className={styles.tasks}>
-              {tasksCount === 0 ? <NoTasks /> : <div></div>}
+              {tasksCount === 0 ? (
+                <NoTasks />
+              ) : (
+                <div className={styles.multipleTasks}>
+                  {tasks.map((task) => (
+                    <Task
+                      task={task}
+                      handleTaskCompletionStatus={handleTaskCompletionStatus}
+                      deleteTask={handleDeleteTask}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </main>
